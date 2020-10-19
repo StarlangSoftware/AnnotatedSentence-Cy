@@ -1,6 +1,5 @@
 import os
 import re
-from Corpus.Corpus cimport Corpus
 from AnnotatedSentence.AnnotatedSentence cimport AnnotatedSentence
 from AnnotatedSentence.AnnotatedWord cimport AnnotatedWord
 
