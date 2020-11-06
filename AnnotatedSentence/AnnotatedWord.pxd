@@ -1,4 +1,4 @@
-from DependencyParser.UniversalDependencyRelation cimport UniversalDependencyRelation
+from DependencyParser.Universal.UniversalDependencyRelation cimport UniversalDependencyRelation
 from Dictionary.Word cimport Word
 from MorphologicalAnalysis.MetamorphicParse cimport MetamorphicParse
 from MorphologicalAnalysis.MorphologicalParse cimport MorphologicalParse
