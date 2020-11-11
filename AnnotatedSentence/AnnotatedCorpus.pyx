@@ -30,6 +30,15 @@ cdef class AnnotatedCorpus(Corpus):
                     sentence = AnnotatedSentence(f, fileName)
                     self.sentences.append(sentence)
 
+    cpdef exportUniversalDependencyFormat(self, str outputFileName):
+        cdef int i
+        cdef AnnotatedSentence sentence
+        file = open(outputFileName, "w")
+        for i in range(self.sentenceCount()):
+            sentence = self.getSentence(i)
+            file.write(sentence.getUniversalDependencyFormat())
+        file.close()
+
     cpdef checkMorphologicalAnalysis(self):
         """
         The method traverses all words in all sentences and prints the words which do not have a morphological analysis.

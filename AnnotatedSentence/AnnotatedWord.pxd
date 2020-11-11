@@ -31,5 +31,6 @@ cdef class AnnotatedWord(Word):
     cpdef setShallowParse(self, str parse)
     cpdef UniversalDependencyRelation getUniversalDependency(self)
     cpdef setUniversalDependency(self, int to, str dependencyType)
+    cpdef str getUniversalDependencyFormat(self, int sentenceLength)
     cpdef getFormattedString(self, object wordFormat)
     cpdef checkGazetteer(self, Gazetteer gazetteer)

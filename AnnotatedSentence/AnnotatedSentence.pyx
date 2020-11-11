@@ -227,6 +227,17 @@ cdef class AnnotatedSentence(Sentence):
         """
         self.writeToFile(self.__fileName)
 
+    cpdef str getUniversalDependencyFormat(self):
+        cdef str result
+        cdef int i
+        cdef AnnotatedWord word
+        result = "# sent_id = " + self.getFileName() + "\n" + "# text = " + self.toString() + "\n"
+        for i in range(self.wordCount()):
+            word = self.getWord(i)
+            result += str(i + 1) + "\t" + word.getUniversalDependencyFormat(self.wordCount()) + "\n"
+        result += "\n"
+        return result
+
     cpdef list constructLiterals(self, WordNet wordNet, FsmMorphologicalAnalyzer fsm, int wordIndex):
         """
         Creates a list of literal candidates for the i'th word in the sentence. It combines the results of

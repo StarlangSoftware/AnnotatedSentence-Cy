@@ -302,6 +302,35 @@ cdef class AnnotatedWord(Word):
         """
         self.__universalDependency = UniversalDependencyRelation(to, dependencyType)
 
+    cpdef str getUniversalDependencyFormat(self, int sentenceLength):
+        cdef str result
+        cdef list features
+        cdef bint first
+        if self.__parse is not None:
+            result = self.name + "\t" + self.__parse.getWord().getName() + "\t" + \
+                     self.__parse.getUniversalDependencyPos() + "\t_\t"
+            features = self.__parse.getUniversalDependencyFeatures()
+            if len(features) == 0:
+                result = result + "_"
+            else:
+                first = True
+                for feature in features:
+                    if first:
+                        first = False
+                    else:
+                        result += "|"
+                    result += feature
+            result += "\t"
+            if self.__universalDependency is not None and self.__universalDependency.to() <= sentenceLength:
+                result += self.__universalDependency.to().__str__() + "\t" + \
+                          self.__universalDependency.__str__().lower() + "\t"
+            else:
+                result += "_\t_\t"
+            result += "_\t_"
+            return result
+        else:
+            return self.name + "\t" + self.name + "\t_\t_\t_\t_\t_\t_\t_"
+
     cpdef getFormattedString(self, object wordFormat):
         if wordFormat == WordFormat.SURFACE:
             return self.name
