@@ -1,5 +1,6 @@
 from DependencyParser.Universal.UniversalDependencyRelation cimport UniversalDependencyRelation
 from Dictionary.Word cimport Word
+from FrameNet.FrameElement cimport FrameElement
 from MorphologicalAnalysis.MetamorphicParse cimport MetamorphicParse
 from MorphologicalAnalysis.MorphologicalParse cimport MorphologicalParse
 from NamedEntityRecognition.Gazetteer cimport Gazetteer
@@ -13,6 +14,7 @@ cdef class AnnotatedWord(Word):
     cdef str __semantic
     cdef object __namedEntityType
     cdef Argument __argument
+    cdef FrameElement __frameElement
     cdef str __shallowParse
     cdef UniversalDependencyRelation __universalDependency
 
@@ -27,6 +29,8 @@ cdef class AnnotatedWord(Word):
     cpdef setNamedEntityType(self, str namedEntity)
     cpdef Argument getArgument(self)
     cpdef setArgument(self, str argument)
+    cpdef FrameElement getFrameElement(self)
+    cpdef setFrameElement(self, str frameElement)
     cpdef str getShallowParse(self)
     cpdef setShallowParse(self, str parse)
     cpdef UniversalDependencyRelation getUniversalDependency(self)

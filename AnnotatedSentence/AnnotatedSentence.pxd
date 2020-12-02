@@ -1,6 +1,7 @@
 from Corpus.Sentence cimport Sentence
 from MorphologicalAnalysis.FsmMorphologicalAnalyzer cimport FsmMorphologicalAnalyzer
 from PropBank.FramesetList cimport FramesetList
+from FrameNet.FrameNet cimport FrameNet
 from WordNet.WordNet cimport WordNet
 
 
@@ -12,6 +13,7 @@ cdef class AnnotatedSentence(Sentence):
     cpdef bint containsPredicate(self)
     cpdef bint updateConnectedPredicate(self, str previousId, str currentId)
     cpdef list predicateCandidates(self, FramesetList framesetList)
+    cpdef list predicateFrameCandidates(self, FrameNet frameNet)
     cpdef str getPredicate(self, int index)
     cpdef str getFileName(self)
     cpdef removeWord(self, int index)
