@@ -269,11 +269,14 @@ cdef class AnnotatedSentence(Sentence):
         """
         self.writeToFile(self.__fileName)
 
-    cpdef str getUniversalDependencyFormat(self):
+    cpdef str getUniversalDependencyFormat(self, str path=None):
         cdef str result
         cdef int i
         cdef AnnotatedWord word
-        result = "# sent_id = " + self.getFileName() + "\n" + "# text = " + self.toString() + "\n"
+        if path is None:
+            result = "# sent_id = " + self.getFileName() + "\n" + "# text = " + self.toString() + "\n"
+        else:
+            result = "# sent_id = " + path + self.getFileName() + "\n" + "# text = " + self.toString() + "\n"
         for i in range(self.wordCount()):
             word = self.getWord(i)
             result += str(i + 1) + "\t" + word.getUniversalDependencyFormat(self.wordCount()) + "\n"

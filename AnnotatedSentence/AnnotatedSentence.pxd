@@ -19,6 +19,6 @@ cdef class AnnotatedSentence(Sentence):
     cpdef removeWord(self, int index)
     cpdef str toStems(self)
     cpdef save(self)
-    cpdef str getUniversalDependencyFormat(self)
+    cpdef str getUniversalDependencyFormat(self, str path=*)
     cpdef list constructLiterals(self, WordNet wordNet, FsmMorphologicalAnalyzer fsm, int wordIndex)
     cpdef list constructSynSets(self, WordNet wordNet, FsmMorphologicalAnalyzer fsm, int wordIndex)

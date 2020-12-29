@@ -30,13 +30,13 @@ cdef class AnnotatedCorpus(Corpus):
                     sentence = AnnotatedSentence(f, fileName)
                     self.sentences.append(sentence)
 
-    cpdef exportUniversalDependencyFormat(self, str outputFileName):
+    cpdef exportUniversalDependencyFormat(self, str outputFileName, str path=None):
         cdef int i
         cdef AnnotatedSentence sentence
         file = open(outputFileName, "w")
         for i in range(self.sentenceCount()):
             sentence = self.getSentence(i)
-            file.write(sentence.getUniversalDependencyFormat())
+            file.write(sentence.getUniversalDependencyFormat(path))
         file.close()
 
     cpdef checkMorphologicalAnalysis(self):
