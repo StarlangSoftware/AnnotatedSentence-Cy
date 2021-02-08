@@ -1,3 +1,20 @@
+This resource allows for matching of Turkish words or expressions with their corresponding entries within the Turkish dictionary, the Turkish PropBank TRopBank, morphological analysis, named entity recognition, word senses from Turkish WordNet KeNet, shallow parsing, and universal dependency relation.
+
+## Data Format
+
+The structure of a sample annotated word is as follows:
+
+	{turkish=Gelir}
+	{morphologicalAnalysis=gelir+NOUN+A3SG+PNON+NOM}
+	{metaMorphemes=gelir}
+	{semantics=TUR10-0289950}
+	{namedEntity=NONE}
+	{propbank=ARG0$TUR10-0798130}
+	{shallowParse=ÖZNE}
+	{universalDependency=10$NSUBJ}
+
+As is self-explanatory, 'turkish' tag shows the original Turkish word; 'morphologicalAnalysis' tag shows the correct morphological parse of that word; 'semantics' tag shows the ID of the correct sense of that word; 'namedEntity' tag shows the named entity tag of that word; 'shallowParse' tag shows the semantic role of that word; 'universalDependency' tag shows the index of the head word and the universal dependency for this word; 'propbank' tag shows the semantic role of that word for the verb synset id (frame id in the frame file) which is also given in that tag.
+
 For Developers
 ============
 
@@ -44,123 +61,51 @@ Steps for opening the cloned project:
 Detailed Description
 ============
 
-+ [TreeBankDrawable](#treebankdrawable)
-+ [ParseTreeDrawable](#parsetreedrawable)
-+ [LayerInfo](#layerinfo)
-+ [Automatic Annotation](#automatic-annotation)
++ [AnnotatedCorpus](#annotatedcorpus)
++ [AnnotatedSentence](#annotatedsentence)
++ [AnnotatedWord](#annotatedword)
 
-## TreeBankDrawable
+## AnnotatedCorpus
 
-To load an annotated TreeBank:
+To load the annotated corpus:
 
-	TreeBankDrawable(folder: str, String pattern: str)
-	a = TreeBankDrawable("/Turkish-Phrase", ".train")
+	AnnotatedCorpus(self, folder: str, pattern: str = None)
+	a = AnnotatedCorpus("/Turkish-Phrase", ".train")
+	b = AnnotatedCorpus("/Turkish-Phrase")
 
-	TreeBankDrawable(folder: str)
-	a = new TreeBankDrawable("/Turkish-Phrase")
-
-To access all the trees in a TreeBankDrawable:
+To access all the sentences in a AnnotatedCorpus:
 
 	for i in range(a.sentenceCount()):
-		parseTree = a.get(i);
+		annotatedSentence = a.getSentence(i)
 		....
-	}
 
-## ParseTreeDrawable
+## AnnotatedSentence
 
-To load a saved ParseTreeDrawable:
+Bir AnnotatedSentence'daki tüm kelimelere ulaşmak için de
 
-	ParseTreeDrawable(file: str)
-	
-is used. Usually it is more useful to load TreeBankDrawable as explained above than to load ParseTree one by one.
+	for j in range(annotatedSentence.wordCount()):
+		annotatedWord = annotatedSentence.getWord(j)
+		...
 
-To find the node number of a ParseTreeDrawable:
+## AnnotatedWord
 
-	nodeCount() -> int
-	
-the leaf number of a ParseTreeDrawable:
+An annotated word is kept in AnnotatedWord class. To access the morphological analysis of 
+the annotated word:
 
-	leafCount() -> int
-	
-the word count in a ParseTreeDrawable:
+	getParse(self) -> MorphologicalParse
 
-	wordCount(excludeStopWords: bool) -> int
-	
-above methods can be used.
+Meaning of the annotated word:
 
-## LayerInfo
+	getSemantic(self) -> str
 
-Information of an annotated word is kept in LayerInfo class. To access the morphological analysis
-of the annotated word:
+NER annotation of the annotated word:
 
-	getMorphologicalParseAt(index: int) -> MorphologicalParse
+	getNamedEntityType(self) -> NamedEntityType
 
-meaning of an annotated word:
+Shallow parse tag of the annotated word (e.g., subject, indirect object):
 
-	getSemanticAt(self, index: int) -> str
+	getShallowParse(self) -> str
 
-the shallow parse tag (e.g., subject, indirect object etc.) of annotated word: 
+Dependency annotation of the annotated word:
 
-	getShallowParseAt(self, index: int) -> str
-
-the argument tag of the annotated word:
-
-	getArgumentAt(self, index: int) -> Argument
-	
-the word count in a node:
-
-	getNumberOfWords(self) -> int
-
-## Automatic Annotation
-
-To assign the arguments of a sentence automatically:
-
-	TurkishAutoArgument(self, secondLanguage: ViewLayerType)
-
-above class is used. 
-
-	autoArgument(self, parseTree: ParseTreeDrawable, frameset: Frameset)
-
-With above line, the arguments of the tree are annotated automatically.
-
-To apply named entity recognition to a sentence:
-
-	TurkishSentenceAutoNER(self, secondLanguage: ViewLayerType)
-
-above class is used. For example,
-
-	a = TurkishTreeAutoNER()
-	a.autoNER(parseTree)
-
-with the above code, automatic named entity recognition of a tree can be made.
-
-To make semantic annotation in a sentence:
-
-	TurkishTreeAutoSemantic()
-
-above class can be used. For example,
-
-	a = TurkishTreeAutoSemantic()
-	a.autoSemantic(parseTree)
-
-with above code, automatic semantic annotation of the tree can be made.
-
-## Cite
-If you use this resource on your research, please cite the following paper: 
-
-```
-@article{akcakaya,
-  title={An all-words sense annotated {T}urkish corpus},
-  author={S. Akçakaya and O. T. Y{\i}ld{\i}z},
-  journal={2018 2nd International Conference on Natural Language and Speech Processing (ICNLSP)},
-  year={2018},
-  pages={1-6}
-}
-
-@inproceedings{arican,
-  title={{E}nglish-{T}urkish Parallel Semantic Annotation of Penn-Treebank},
-  author={ B. N. Ar{\i}can and {\"O}. Bakay and B. Avar and O. T. Y{\i}ld{\i}z and {\"O}. Ergelen},
-  booktitle={Wordnet Conference},
-  pages={298},
-  year={2019}
-}
+	getUniversalDependency(self) -> UniversalDependencyRelation
