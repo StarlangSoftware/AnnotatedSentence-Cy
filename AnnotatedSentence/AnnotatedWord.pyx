@@ -156,7 +156,7 @@ cdef class AnnotatedWord(Word):
         """
         return self.__parse
 
-    cpdef setParse(self, MorphologicalParse parseString):
+    cpdef setParse(self, str parseString):
         """
         Sets the morphological parse layer of the word.
 

@@ -20,7 +20,7 @@ cdef class AnnotatedWord(Word):
 
     cpdef str getLayerInfo(self, object viewLayerType)
     cpdef MorphologicalParse getParse(self)
-    cpdef setParse(self, MorphologicalParse parseString)
+    cpdef setParse(self, str parseString)
     cpdef MetamorphicParse getMetamorphicParse(self)
     cpdef setMetamorphicParse(self, str parseString)
     cpdef str getSemantic(self)
