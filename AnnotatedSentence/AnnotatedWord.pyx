@@ -46,9 +46,9 @@ cdef class AnnotatedWord(Word):
                     self.__metamorphicParse = MetamorphicParse(layerValue)
                 elif layerType == "namedEntity":
                     self.__namedEntityType = NamedEntityType.getNamedEntityType(layerValue)
-                elif layerType == "propbank":
+                elif layerType == "propbank" or layerType == "propBank":
                     self.__argument = Argument(layerValue)
-                elif layerType == "framenet":
+                elif layerType == "framenet" or layerType == "frameNet":
                     self.__frameElement = FrameElement(layerValue)
                 elif layerType == "shallowParse":
                     self.__shallowParse = layerValue
@@ -259,7 +259,7 @@ cdef class AnnotatedWord(Word):
         argument : Argument
             New semantic role tag of the word.
         """
-        if self.__argument is not None:
+        if argument is not None:
             self.__argument = Argument(argument)
         else:
             self.__argument = None
@@ -284,7 +284,7 @@ cdef class AnnotatedWord(Word):
         frameElement : str
             New framenet tag of the word.
         """
-        if self.__frameElement is not None:
+        if frameElement is not None:
             self.__frameElement = Argument(frameElement)
         else:
             self.__frameElement = None
