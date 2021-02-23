@@ -4,6 +4,7 @@ from FrameNet.FrameElement cimport FrameElement
 from MorphologicalAnalysis.MetamorphicParse cimport MetamorphicParse
 from MorphologicalAnalysis.MorphologicalParse cimport MorphologicalParse
 from NamedEntityRecognition.Gazetteer cimport Gazetteer
+from NamedEntityRecognition.Slot cimport Slot
 from PropBank.Argument cimport Argument
 
 
@@ -17,6 +18,7 @@ cdef class AnnotatedWord(Word):
     cdef FrameElement __frameElement
     cdef str __shallowParse
     cdef UniversalDependencyRelation __universalDependency
+    cdef Slot __slot
 
     cpdef str getLayerInfo(self, object viewLayerType)
     cpdef MorphologicalParse getParse(self)
@@ -31,6 +33,8 @@ cdef class AnnotatedWord(Word):
     cpdef setArgument(self, str argument)
     cpdef FrameElement getFrameElement(self)
     cpdef setFrameElement(self, str frameElement)
+    cpdef Slot getSlot(self)
+    cpdef setSlot(self, str slot)
     cpdef str getShallowParse(self)
     cpdef setShallowParse(self, str parse)
     cpdef UniversalDependencyRelation getUniversalDependency(self)

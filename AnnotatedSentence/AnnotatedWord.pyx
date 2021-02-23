@@ -28,6 +28,7 @@ cdef class AnnotatedWord(Word):
         self.__frameElement = None
         self.__shallowParse = None
         self.__universalDependency = None
+        self.__slot = None
         if layerType is None:
             splitLayers = re.compile("[{}]").split(word)
             for layer in splitLayers:
@@ -54,6 +55,8 @@ cdef class AnnotatedWord(Word):
                     self.__shallowParse = layerValue
                 elif layerType == "semantics":
                     self.__semantic = layerValue
+                elif layerType == "slot":
+                    self.__slot = Slot(layerValue)
                 elif layerType == "universalDependency":
                     values = layerValue.split("$")
                     self.__universalDependency = UniversalDependencyRelation(int(values[0]), values[1])
@@ -97,6 +100,8 @@ cdef class AnnotatedWord(Word):
             result = result + "{propbank=" + self.__argument.__str__() + "}"
         if self.__frameElement is not None:
             result = result + "{framenet=" + self.__frameElement.__str__() + "}"
+        if self.__slot is not None:
+            result = result + "{slot=" + self.__slot.__str__() + "}"
         if self.__shallowParse is not None:
             result = result + "{shallowParse=" + self.__shallowParse + "}"
         if self.__universalDependency is not None:
@@ -139,6 +144,9 @@ cdef class AnnotatedWord(Word):
         elif viewLayerType == ViewLayerType.FRAMENET:
             if self.__frameElement is not None:
                 return self.__frameElement.__str__()
+        elif viewLayerType == ViewLayerType.SLOT:
+            if self.__slot is not None:
+                return self.__slot.__str__()
         elif viewLayerType == ViewLayerType.DEPENDENCY:
             if self.__universalDependency is not None:
                 return self.__universalDependency.to().__str__() + "$" + self.__universalDependency.__str__()
@@ -288,6 +296,31 @@ cdef class AnnotatedWord(Word):
             self.__frameElement = Argument(frameElement)
         else:
             self.__frameElement = None
+
+    cpdef Slot getSlot(self):
+        """
+        Returns the slot layer of the word.
+
+        RETURNS
+        -------
+        Slot
+            Slot tag of the word.
+        """
+        return self.__slot
+
+    cpdef setSlot(self, str slot):
+        """
+        Sets the slot layer of the word.
+
+        PARAMETERS
+        ----------
+        slot : str
+            New slot tag of the word.
+        """
+        if slot is not None:
+            self.__slot = Slot(slot)
+        else:
+            self.__slot = None
 
     cpdef str getShallowParse(self):
         """
