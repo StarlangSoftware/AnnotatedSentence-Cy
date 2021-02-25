@@ -372,10 +372,12 @@ cdef class AnnotatedWord(Word):
         cdef str result
         cdef list features
         cdef bint first
+        cdef str uPos
         if self.__parse is not None:
+            uPos = self.__parse.getUniversalDependencyPos()
             result = self.name + "\t" + self.__parse.getWord().getName() + "\t" + \
-                     self.__parse.getUniversalDependencyPos() + "\t_\t"
-            features = self.__parse.getUniversalDependencyFeatures()
+                     uPos + "\t_\t"
+            features = self.__parse.getUniversalDependencyFeatures(uPos)
             if len(features) == 0:
                 result = result + "_"
             else:
