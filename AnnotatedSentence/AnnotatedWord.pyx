@@ -1,6 +1,7 @@
 import re
 from MorphologicalAnalysis.MorphologicalTag import MorphologicalTag
 from MorphologicalAnalysis.FsmParse cimport FsmParse
+from SentiNet.PolarityType import PolarityType
 from AnnotatedSentence.ViewLayerType import ViewLayerType
 from Corpus.WordFormat import WordFormat
 from NamedEntityRecognition.NamedEntityType import NamedEntityType
@@ -29,6 +30,7 @@ cdef class AnnotatedWord(Word):
         self.__shallowParse = None
         self.__universalDependency = None
         self.__slot = None
+        self.__polarity = None
         if layerType is None:
             splitLayers = re.compile("[{}]").split(word)
             for layer in splitLayers:
@@ -57,6 +59,8 @@ cdef class AnnotatedWord(Word):
                     self.__semantic = layerValue
                 elif layerType == "slot":
                     self.__slot = Slot(layerValue)
+                elif layerType == "polarity":
+                    self.setPolarity(layerValue)
                 elif layerType == "universalDependency":
                     values = layerValue.split("$")
                     self.__universalDependency = UniversalDependencyRelation(int(values[0]), values[1])
@@ -104,6 +108,8 @@ cdef class AnnotatedWord(Word):
             result = result + "{slot=" + self.__slot.__str__() + "}"
         if self.__shallowParse is not None:
             result = result + "{shallowParse=" + self.__shallowParse + "}"
+        if self.__polarity is not None:
+            result = result + "{polarity=" + self.getPolarityString() + "}"
         if self.__universalDependency is not None:
             result = result + "{universalDependency=" + self.__universalDependency.to().__str__() + "$" + \
                      self.__universalDependency.__str__() + "}"
@@ -147,6 +153,9 @@ cdef class AnnotatedWord(Word):
         elif viewLayerType == ViewLayerType.SLOT:
             if self.__slot is not None:
                 return self.__slot.__str__()
+        elif viewLayerType == ViewLayerType.POLARITY:
+            if self.__polarity is not None:
+                return self.getPolarityString()
         elif viewLayerType == ViewLayerType.DEPENDENCY:
             if self.__universalDependency is not None:
                 return self.__universalDependency.to().__str__() + "$" + self.__universalDependency.__str__()
@@ -321,6 +330,54 @@ cdef class AnnotatedWord(Word):
             self.__slot = Slot(slot)
         else:
             self.__slot = None
+
+    cpdef object getPolarity(self):
+        """
+        Returns the polarity layer of the word.
+
+        RETURNS
+        -------
+        PolarityType
+            Polarity tag of the word.
+        """
+        return self.__polarity
+
+    cpdef str getPolarityString(self):
+        """
+        Returns the polarity layer of the word.
+
+        RETURNS
+        -------
+        str
+            Polarity string of the word.
+        """
+        if self.__polarity == PolarityType.POSITIVE:
+            return "positive"
+        elif self.__polarity == PolarityType.NEGATIVE:
+            return "negative"
+        elif self.__polarity == PolarityType.NEUTRAL:
+            return "neutral"
+        else:
+            return "neutral"
+
+    cpdef setPolarity(self, str polarity):
+        """
+        Sets the polarity layer of the word.
+
+        PARAMETERS
+        ----------
+        polarity : str
+            New polarity tag of the word.
+        """
+        if polarity is not None:
+            if polarity == "positive" or polarity == "pos":
+                self.__polarity = PolarityType.POSITIVE
+            elif polarity == "negative" or polarity == "neg":
+                self.__polarity = PolarityType.NEGATIVE
+            else:
+                self.__polarity = PolarityType.NEUTRAL
+        else:
+            self.__polarity = None
 
     cpdef str getShallowParse(self):
         """

@@ -19,6 +19,7 @@ cdef class AnnotatedWord(Word):
     cdef str __shallowParse
     cdef UniversalDependencyRelation __universalDependency
     cdef Slot __slot
+    cdef object __polarity
 
     cpdef str getLayerInfo(self, object viewLayerType)
     cpdef MorphologicalParse getParse(self)
@@ -35,6 +36,9 @@ cdef class AnnotatedWord(Word):
     cpdef setFrameElement(self, str frameElement)
     cpdef Slot getSlot(self)
     cpdef setSlot(self, str slot)
+    cpdef object getPolarity(self)
+    cpdef str getPolarityString(self)
+    cpdef setPolarity(self, str polarity)
     cpdef str getShallowParse(self)
     cpdef setShallowParse(self, str parse)
     cpdef UniversalDependencyRelation getUniversalDependency(self)

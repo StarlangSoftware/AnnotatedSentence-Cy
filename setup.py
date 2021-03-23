@@ -5,7 +5,7 @@ setup(
     ext_modules=cythonize(["AnnotatedSentence/*.pyx"],
                           compiler_directives={'language_level': "3"}),
     name='NlpToolkit-AnnotatedSentence-Cy',
-    version='1.0.9',
+    version='1.0.10',
     packages=['AnnotatedSentence'],
     package_data={'AnnotatedSentence': ['*.pxd', '*.pyx', '*.c', '*.py']},
     url='https://github.com/StarlangSoftware/AnnotatedSentence-Cy',
@@ -13,5 +13,5 @@ setup(
     author='olcaytaner',
     author_email='olcay.yildiz@ozyegin.edu.tr',
     description='Annotated Sentence Processing Library',
-    install_requires=['NlpToolkit-WordNet-Cy', 'NlpToolkit-NamedEntityRecognition-Cy', 'NlpToolkit-PropBank-Cy', 'NlpToolkit-DependencyParser-Cy']
+    install_requires=['NlpToolkit-WordNet-Cy', 'NlpToolkit-NamedEntityRecognition-Cy', 'NlpToolkit-PropBank-Cy', 'NlpToolkit-DependencyParser-Cy', 'NlpToolkit-SentiNet-Cy']
 )

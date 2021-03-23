@@ -23,3 +23,4 @@ class ViewLayerType(Enum):
     ENGLISH_PROPBANK = auto()
     ENGLISH_SEMANTICS = auto()
     SLOT = auto()
+    POLARITY = auto()
