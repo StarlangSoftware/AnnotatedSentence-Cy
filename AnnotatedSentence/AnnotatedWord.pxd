@@ -9,7 +9,17 @@ from PropBank.Argument cimport Argument
 
 
 cdef class AnnotatedWord(Word):
-
+    """
+     * In order to add another layer, do the following:
+     * 1. Select a name for the layer.
+     * 2. Add a new constant to ViewLayerType.
+     * 3. Add private attribute.
+     * 4. Add an if-else to the constructor, where you set the private attribute with the layer name.
+     * 5. Update toString method.
+     * 6. Add initial value to the private attribute in other constructors.
+     * 7. Update getLayerInfo.
+     * 8. Add getter and setter methods.
+    """
     cdef MorphologicalParse __parse
     cdef MetamorphicParse __metamorphicParse
     cdef str __semantic
@@ -20,6 +30,7 @@ cdef class AnnotatedWord(Word):
     cdef UniversalDependencyRelation __universalDependency
     cdef Slot __slot
     cdef object __polarity
+    cdef str ccg
 
     cpdef str getLayerInfo(self, object viewLayerType)
     cpdef MorphologicalParse getParse(self)
@@ -41,6 +52,8 @@ cdef class AnnotatedWord(Word):
     cpdef setPolarity(self, str polarity)
     cpdef str getShallowParse(self)
     cpdef setShallowParse(self, str parse)
+    cpdef str getCcg(self)
+    cpdef setCcg(self, str ccg)
     cpdef UniversalDependencyRelation getUniversalDependency(self)
     cpdef setUniversalDependency(self, int to, str dependencyType)
     cpdef str getUniversalDependencyFormat(self, int sentenceLength)

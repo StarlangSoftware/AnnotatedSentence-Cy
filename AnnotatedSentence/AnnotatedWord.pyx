@@ -31,6 +31,7 @@ cdef class AnnotatedWord(Word):
         self.__universalDependency = None
         self.__slot = None
         self.__polarity = None
+        self.__ccg = None
         if layerType is None:
             splitLayers = re.compile("[{}]").split(word)
             for layer in splitLayers:
@@ -64,6 +65,8 @@ cdef class AnnotatedWord(Word):
                 elif layerType == "universalDependency":
                     values = layerValue.split("$")
                     self.__universalDependency = UniversalDependencyRelation(int(values[0]), values[1])
+                elif layerType == "ccg":
+                    self.__ccg = layerValue
         elif isinstance(layerType, NamedEntityType):
             super().__init__(word)
             self.__namedEntityType = layerType
@@ -113,6 +116,8 @@ cdef class AnnotatedWord(Word):
         if self.__universalDependency is not None:
             result = result + "{universalDependency=" + self.__universalDependency.to().__str__() + "$" + \
                      self.__universalDependency.__str__() + "}"
+        if self.__ccg is not None:
+            result = result + "{ccg=" + self.__ccg + "}"
         return result
 
     cpdef str getLayerInfo(self, object viewLayerType):
@@ -159,6 +164,8 @@ cdef class AnnotatedWord(Word):
         elif viewLayerType == ViewLayerType.DEPENDENCY:
             if self.__universalDependency is not None:
                 return self.__universalDependency.to().__str__() + "$" + self.__universalDependency.__str__()
+        elif viewLayerType == ViewLayerType.CCG:
+            return self.__ccg
         else:
             return None
 
@@ -400,6 +407,28 @@ cdef class AnnotatedWord(Word):
             New shallow parse tag of the word.
         """
         self.__shallowParse = parse
+
+    cpdef str getCcg(self):
+        """
+        Returns the ccg layer of the word.
+
+        RETURNS
+        -------
+        str
+            Ccg tag of the word.
+        """
+        return self.__ccg
+
+    cpdef setCcg(self, str ccg):
+        """
+        Sets the ccg layer of the word.
+
+        PARAMETERS
+        ----------
+        parse : str
+            New ccg tag of the word.
+        """
+        self.__ccg = ccg
 
     cpdef UniversalDependencyRelation getUniversalDependency(self):
         """
