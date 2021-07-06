@@ -54,6 +54,8 @@ cdef class AnnotatedWord(Word):
     cpdef setShallowParse(self, str parse)
     cpdef str getCcg(self)
     cpdef setCcg(self, str ccg)
+    cpdef str getPosTag(self)
+    cpdef setPosTag(self, str posTag)
     cpdef UniversalDependencyRelation getUniversalDependency(self)
     cpdef setUniversalDependency(self, int to, str dependencyType)
     cpdef str getUniversalDependencyFormat(self, int sentenceLength)

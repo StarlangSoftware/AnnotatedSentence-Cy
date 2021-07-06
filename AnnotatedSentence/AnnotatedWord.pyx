@@ -32,6 +32,7 @@ cdef class AnnotatedWord(Word):
         self.__slot = None
         self.__polarity = None
         self.__ccg = None
+        self.__posTag = None
         if layerType is None:
             splitLayers = re.compile("[{}]").split(word)
             for layer in splitLayers:
@@ -67,6 +68,8 @@ cdef class AnnotatedWord(Word):
                     self.__universalDependency = UniversalDependencyRelation(int(values[0]), values[1])
                 elif layerType == "ccg":
                     self.__ccg = layerValue
+                elif layerType == "posTag":
+                    self.__posTag = layerValue
         elif isinstance(layerType, NamedEntityType):
             super().__init__(word)
             self.__namedEntityType = layerType
@@ -118,6 +121,8 @@ cdef class AnnotatedWord(Word):
                      self.__universalDependency.__str__() + "}"
         if self.__ccg is not None:
             result = result + "{ccg=" + self.__ccg + "}"
+        if self.__posTag is not None:
+            result = result + "{posTag=" + self.__posTag + "}"
         return result
 
     cpdef str getLayerInfo(self, object viewLayerType):
@@ -166,6 +171,8 @@ cdef class AnnotatedWord(Word):
                 return self.__universalDependency.to().__str__() + "$" + self.__universalDependency.__str__()
         elif viewLayerType == ViewLayerType.CCG:
             return self.__ccg
+        elif viewLayerType == ViewLayerType.POS_TAG:
+            return self.__posTag
         else:
             return None
 
@@ -429,6 +436,28 @@ cdef class AnnotatedWord(Word):
             New ccg tag of the word.
         """
         self.__ccg = ccg
+
+    cpdef str getPosTag(self):
+        """
+        Returns the pos tag layer of the word.
+
+        RETURNS
+        -------
+        str
+            Pos tag of the word.
+        """
+        return self.__posTag
+
+    cpdef setPosTag(self, str posTag):
+        """
+        Sets the posTag layer of the word.
+
+        PARAMETERS
+        ----------
+        posTag : str
+            New pos tag of the word.
+        """
+        self.__posTag = posTag
 
     cpdef UniversalDependencyRelation getUniversalDependency(self):
         """

@@ -24,3 +24,5 @@ class ViewLayerType(Enum):
     ENGLISH_SEMANTICS = auto()
     SLOT = auto()
     POLARITY = auto()
+    CCG = auto()
+    POS_TAG = auto()
