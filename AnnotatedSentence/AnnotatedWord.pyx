@@ -5,6 +5,7 @@ from SentiNet.PolarityType import PolarityType
 from AnnotatedSentence.ViewLayerType import ViewLayerType
 from Corpus.WordFormat import WordFormat
 from NamedEntityRecognition.NamedEntityType import NamedEntityType
+from AnnotatedSentence.Language import Language
 
 
 cdef class AnnotatedWord(Word):
@@ -43,8 +44,9 @@ cdef class AnnotatedWord(Word):
                     continue
                 layerType = layer[:layer.index("=")]
                 layerValue = layer[layer.index("=") + 1:]
-                if layerType == "turkish":
+                if layerType == "turkish" or layerType == "english" or layerType == "persian":
                     self.name = layerValue
+                    self.__language = AnnotatedWord.getLanguageFromString(layerType)
                 elif layerType == "morphologicalAnalysis":
                     self.__parse = MorphologicalParse(layerValue)
                 elif layerType == "metaMorphemes":
@@ -97,7 +99,13 @@ cdef class AnnotatedWord(Word):
             String form of the AnnotatedWord.
         """
         cdef str result
-        result = "{turkish=" + self.name + "}"
+        result = ""
+        if self.__language == Language.TURKISH:
+            result = "{turkish=" + self.name + "}"
+        elif self.__language == Language.ENGLISH:
+            result = "{english=" + self.name + "}"
+        elif self.__language == Language.PERSIAN:
+            result = "{persian=" + self.name + "}"
         if self.__parse is not None:
             result = result + "{morphologicalAnalysis=" + self.__parse.__str__() + "}"
         if self.__metamorphicParse is not None:
@@ -530,3 +538,36 @@ cdef class AnnotatedWord(Word):
         if "'" in wordLowercase and gazetteer.contains(wordLowercase[:wordLowercase.index("'")]) and \
                 self.__parse.containsTag(MorphologicalTag.PROPERNOUN):
             self.setNamedEntityType(gazetteer.getName())
+
+    cpdef object getLanguage(self):
+        """
+        Returns the language of the word.
+
+        RETURNS
+        ----------
+        The language of the word.
+        """
+        return self.__language
+
+    @staticmethod
+    def getLanguageFromString(languageString: str) -> Language:
+        """
+        Converts a language string to language.
+
+        PARAMETERS
+        ----------
+        languageString : str
+            String defining the language name.
+
+        RETURNS
+        ----------
+        Language corresponding to the languageString.
+        """
+        if languageString == "turkish" or languageString == "Turkish":
+            return Language.TURKISH
+        elif languageString == "english" or languageString == "English":
+            return Language.ENGLISH
+        elif languageString == "persian" or languageString == "Persian":
+            return Language.PERSIAN
+        else:
+            return Language.TURKISH

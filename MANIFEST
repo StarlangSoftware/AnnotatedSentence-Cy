@@ -12,5 +12,6 @@ AnnotatedSentence/AnnotatedSentence.pyx
 AnnotatedSentence/AnnotatedWord.c
 AnnotatedSentence/AnnotatedWord.pxd
 AnnotatedSentence/AnnotatedWord.pyx
+AnnotatedSentence/Language.py
 AnnotatedSentence/ViewLayerType.py
 AnnotatedSentence/__init__.py

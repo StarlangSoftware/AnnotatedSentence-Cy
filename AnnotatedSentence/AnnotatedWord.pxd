@@ -30,7 +30,9 @@ cdef class AnnotatedWord(Word):
     cdef UniversalDependencyRelation __universalDependency
     cdef Slot __slot
     cdef object __polarity
-    cdef str ccg
+    cdef str __ccg
+    cdef str __posTag
+    cdef object __language
 
     cpdef str getLayerInfo(self, object viewLayerType)
     cpdef MorphologicalParse getParse(self)
@@ -61,3 +63,4 @@ cdef class AnnotatedWord(Word):
     cpdef str getUniversalDependencyFormat(self, int sentenceLength)
     cpdef getFormattedString(self, object wordFormat)
     cpdef checkGazetteer(self, Gazetteer gazetteer)
+    cpdef object getLanguage(self)
