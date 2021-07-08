@@ -34,6 +34,7 @@ cdef class AnnotatedWord(Word):
         self.__polarity = None
         self.__ccg = None
         self.__posTag = None
+        self.__language = Language.TURKISH
         if layerType is None:
             splitLayers = re.compile("[{}]").split(word)
             for layer in splitLayers:
