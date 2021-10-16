@@ -2,6 +2,8 @@ from io import TextIOWrapper
 
 from AnnotatedSentence.AnnotatedPhrase cimport AnnotatedPhrase
 from AnnotatedSentence.AnnotatedWord cimport AnnotatedWord
+from DependencyParser.ParserEvaluationScore cimport ParserEvaluationScore
+from DependencyParser.Universal.UniversalDependencyRelation cimport UniversalDependencyRelation
 from MorphologicalAnalysis.MorphologicalParse cimport MorphologicalParse
 from MorphologicalAnalysis.MetamorphicParse cimport MetamorphicParse
 
@@ -262,6 +264,17 @@ cdef class AnnotatedSentence(Sentence):
             return result
         else:
             return ""
+
+    cpdef ParserEvaluationScore compareParses(self, AnnotatedSentence sentence):
+        cdef ParserEvaluationScore score
+        cdef UniversalDependencyRelation relation1, relation2
+        score = ParserEvaluationScore()
+        for i in range(self.wordCount()):
+            relation1 = self.words[i].getUniversalDependency()
+            relation2 = sentence.getWord(i).getUniversalDependency()
+            if relation1 is not None and relation2 is not None:
+                score.add(relation1.compareRelations(relation2))
+        return score
 
     cpdef save(self):
         """

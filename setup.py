@@ -5,7 +5,7 @@ setup(
     ext_modules=cythonize(["AnnotatedSentence/*.pyx"],
                           compiler_directives={'language_level': "3"}),
     name='NlpToolkit-AnnotatedSentence-Cy',
-    version='1.0.15',
+    version='1.0.16',
     packages=['AnnotatedSentence'],
     package_data={'AnnotatedSentence': ['*.pxd', '*.pyx', '*.c', '*.py']},
     url='https://github.com/StarlangSoftware/AnnotatedSentence-Cy',

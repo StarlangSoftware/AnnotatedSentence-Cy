@@ -1,4 +1,5 @@
 from Corpus.Sentence cimport Sentence
+from DependencyParser.ParserEvaluationScore cimport ParserEvaluationScore
 from MorphologicalAnalysis.FsmMorphologicalAnalyzer cimport FsmMorphologicalAnalyzer
 from PropBank.FramesetList cimport FramesetList
 from FrameNet.FrameNet cimport FrameNet
@@ -18,6 +19,7 @@ cdef class AnnotatedSentence(Sentence):
     cpdef str getFileName(self)
     cpdef removeWord(self, int index)
     cpdef str toStems(self)
+    cpdef ParserEvaluationScore compareParses(self, AnnotatedSentence sentence)
     cpdef save(self)
     cpdef str getUniversalDependencyFormat(self, str path=*)
     cpdef list constructLiterals(self, WordNet wordNet, FsmMorphologicalAnalyzer fsm, int wordIndex)

@@ -2,7 +2,7 @@ import os
 import re
 from AnnotatedSentence.AnnotatedSentence cimport AnnotatedSentence
 from AnnotatedSentence.AnnotatedWord cimport AnnotatedWord
-
+from DependencyParser.ParserEvaluationScore cimport ParserEvaluationScore
 
 cdef class AnnotatedCorpus(Corpus):
 
@@ -29,6 +29,17 @@ cdef class AnnotatedCorpus(Corpus):
                     f = open(fileName, "r", encoding='utf8')
                     sentence = AnnotatedSentence(f, fileName)
                     self.sentences.append(sentence)
+
+    cpdef ParserEvaluationScore compareParses(self, AnnotatedCorpus corpus):
+        cdef ParserEvaluationScore result
+        cdef int i
+        cdef AnnotatedSentence sentence1, sentence2
+        result = ParserEvaluationScore()
+        for i in range(len(self.sentences)):
+            sentence1 = self.sentences[i]
+            sentence2 = corpus.getSentence(i)
+            result.add(sentence1.compareParses(sentence2))
+        return result
 
     cpdef exportUniversalDependencyFormat(self, str outputFileName, str path=None):
         cdef int i
