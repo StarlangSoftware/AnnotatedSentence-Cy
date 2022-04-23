@@ -28,6 +28,7 @@ cdef class AnnotatedSentence(Sentence):
                 self.__fileName = fileName
             if isinstance(fileOrStr, TextIOWrapper):
                 line = fileOrStr.readline()
+                fileOrStr.close()
                 wordArray = line.rstrip().split(" ")
             elif isinstance(self, str):
                 wordArray = fileOrStr.split(" ")
