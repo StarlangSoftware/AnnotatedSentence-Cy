@@ -17,7 +17,7 @@ setup(
     author='olcaytaner',
     author_email='olcay.yildiz@ozyegin.edu.tr',
     description='Annotated Sentence Processing Library',
-    install_requires=['NlpToolkit-WordNet-Cy', 'NlpToolkit-NamedEntityRecognition-Cy', 'NlpToolkit-PropBank-Cy', 'NlpToolkit-DependencyParser-Cy', 'NlpToolkit-SentiNet-Cy'],
+    install_requires=['NlpToolkit-WordNet-Cy', 'NlpToolkit-NamedEntityRecognition-Cy', 'NlpToolkit-PropBank-Cy', 'NlpToolkit-DependencyParser-Cy', 'NlpToolkit-SentiNet-Cy', 'NlpToolkit-FrameNet-Cy'],
     long_description=long_description,
     long_description_content_type='text/markdown'
 )
