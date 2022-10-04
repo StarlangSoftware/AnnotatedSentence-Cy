@@ -21,17 +21,17 @@ cdef class AnnotatedWord(Word):
      * 8. Add getter and setter methods.
     """
     cdef MorphologicalParse __parse
-    cdef MetamorphicParse __metamorphicParse
+    cdef MetamorphicParse __metamorphic_parse
     cdef str __semantic
-    cdef object __namedEntityType
+    cdef object __named_entity_type
     cdef Argument __argument
-    cdef FrameElement __frameElement
-    cdef str __shallowParse
-    cdef UniversalDependencyRelation __universalDependency
+    cdef FrameElement __frame_element
+    cdef str __shallow_parse
+    cdef UniversalDependencyRelation __universal_dependency
     cdef Slot __slot
     cdef object __polarity
     cdef str __ccg
-    cdef str __posTag
+    cdef str __pos_tag
     cdef object __language
 
     cpdef str getLayerInfo(self, object viewLayerType)

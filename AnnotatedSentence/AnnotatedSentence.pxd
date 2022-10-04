@@ -8,7 +8,7 @@ from WordNet.WordNet cimport WordNet
 
 cdef class AnnotatedSentence(Sentence):
 
-    cdef str __fileName
+    cdef str __file_name
 
     cpdef list getShallowParseGroups(self)
     cpdef bint containsPredicate(self)

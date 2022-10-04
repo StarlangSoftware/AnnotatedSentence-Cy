@@ -10,7 +10,9 @@ from MorphologicalAnalysis.MetamorphicParse cimport MetamorphicParse
 
 cdef class AnnotatedSentence(Sentence):
 
-    def __init__(self, fileOrStr=None, fileName=None):
+    def __init__(self,
+                 fileOrStr=None,
+                 fileName=None):
         """
         Converts a simple sentence to an annotated sentence
 
@@ -19,20 +21,20 @@ cdef class AnnotatedSentence(Sentence):
         fileOrStr
             Simple sentence
         """
-        cdef list wordArray
+        cdef list word_array
         cdef str line, word
         self.words = []
-        wordArray = []
+        word_array = []
         if fileOrStr is not None:
             if fileName is not None:
-                self.__fileName = fileName
+                self.__file_name = fileName
             if isinstance(fileOrStr, TextIOWrapper):
                 line = fileOrStr.readline()
                 fileOrStr.close()
-                wordArray = line.rstrip().split(" ")
+                word_array = line.rstrip().split(" ")
             elif isinstance(self, str):
-                wordArray = fileOrStr.split(" ")
-            for word in wordArray:
+                word_array = fileOrStr.split(" ")
+            for word in word_array:
                 if len(word) > 0:
                     self.words.append(AnnotatedWord(word))
 
@@ -45,27 +47,27 @@ cdef class AnnotatedSentence(Sentence):
         list
             Shallow parse groups of a sentence.
         """
-        cdef list shallowParseGroups
-        cdef AnnotatedWord word, previousWord
+        cdef list shallow_parse_groups
+        cdef AnnotatedWord word, previous_word
         cdef AnnotatedPhrase current
         cdef int i
-        shallowParseGroups = []
-        previousWord = None
+        shallow_parse_groups = []
+        previous_word = None
         current = None
         for i in range(self.wordCount()):
             word = self.getWord(i)
             if isinstance(word, AnnotatedWord):
-                if previousWord is None:
+                if previous_word is None:
                     current = AnnotatedPhrase(i, word.getShallowParse())
                 else:
-                    if isinstance(previousWord, AnnotatedWord) and previousWord.getShallowParse() is not None \
-                            and previousWord.getShallowParse() != word.getShallowParse():
-                        shallowParseGroups.append(current)
+                    if isinstance(previous_word, AnnotatedWord) and previous_word.getShallowParse() is not None \
+                            and previous_word.getShallowParse() != word.getShallowParse():
+                        shallow_parse_groups.append(current)
                         current = AnnotatedPhrase(i, word.getShallowParse())
                 current.addWord(word)
-                previousWord = word
-        shallowParseGroups.append(current)
-        return shallowParseGroups
+                previous_word = word
+        shallow_parse_groups.append(current)
+        return shallow_parse_groups
 
     cpdef bint containsPredicate(self):
         """
@@ -84,7 +86,9 @@ cdef class AnnotatedSentence(Sentence):
                     return True
         return False
 
-    cpdef bint updateConnectedPredicate(self, str previousId, str currentId):
+    cpdef bint updateConnectedPredicate(self,
+                                        str previousId,
+                                        str currentId):
         cdef bint modified
         cdef AnnotatedWord word
         modified = False
@@ -117,25 +121,25 @@ cdef class AnnotatedSentence(Sentence):
         -------
         A list of words, which are verbs, semantic tags assigned, and framesetlist assigned for that tag.
         """
-        cdef list candidateList
-        cdef AnnotatedWord word, annotatedWord, nextAnnotatedWord
+        cdef list candidate_list
+        cdef AnnotatedWord word, annotated_word, next_annotated_word
         cdef int i, j
-        candidateList = []
+        candidate_list = []
         for word in self.words:
             if isinstance(word, AnnotatedWord):
                 if word.getParse() is not None and word.getParse().isVerb() and word.getSemantic() is not None \
                         and framesetList.frameExists(word.getSemantic()):
-                    candidateList.append(word)
+                    candidate_list.append(word)
         for i in range(2):
             for j in range(len(self.words) - i - 1):
-                annotatedWord = self.words[j]
-                nextAnnotatedWord = self.words[j + 1]
-                if isinstance(annotatedWord, AnnotatedWord) and isinstance(nextAnnotatedWord, AnnotatedWord):
-                    if annotatedWord not in candidateList and nextAnnotatedWord in candidateList \
-                            and annotatedWord.getSemantic() is not None \
-                            and annotatedWord.getSemantic() == nextAnnotatedWord.getSemantic():
-                        candidateList.append(annotatedWord)
-        return candidateList
+                annotated_word = self.words[j]
+                next_annotated_word = self.words[j + 1]
+                if isinstance(annotated_word, AnnotatedWord) and isinstance(next_annotated_word, AnnotatedWord):
+                    if annotated_word not in candidate_list and next_annotated_word in candidate_list \
+                            and annotated_word.getSemantic() is not None \
+                            and annotated_word.getSemantic() == next_annotated_word.getSemantic():
+                        candidate_list.append(annotated_word)
+        return candidate_list
 
     cpdef list predicateFrameCandidates(self, FrameNet frameNet):
         """
@@ -153,25 +157,25 @@ cdef class AnnotatedSentence(Sentence):
         -------
         A list of words, which are verbs, semantic tags assigned, and frame assigned for that tag.
         """
-        cdef list candidateList
-        cdef AnnotatedWord word, annotatedWord, nextAnnotatedWord
+        cdef list candidate_list
+        cdef AnnotatedWord word, annotated_word, next_annotated_word
         cdef int i, j
-        candidateList = []
+        candidate_list = []
         for word in self.words:
             if isinstance(word, AnnotatedWord):
                 if word.getParse() is not None and word.getParse().isVerb() and word.getSemantic() is not None \
                         and frameNet.lexicalUnitExists(word.getSemantic()):
-                    candidateList.append(word)
+                    candidate_list.append(word)
         for i in range(2):
             for j in range(len(self.words) - i - 1):
-                annotatedWord = self.words[j]
-                nextAnnotatedWord = self.words[j + 1]
-                if isinstance(annotatedWord, AnnotatedWord) and isinstance(nextAnnotatedWord, AnnotatedWord):
-                    if annotatedWord not in candidateList and nextAnnotatedWord in candidateList \
-                            and annotatedWord.getSemantic() is not None \
-                            and annotatedWord.getSemantic() == nextAnnotatedWord.getSemantic():
-                        candidateList.append(annotatedWord)
-        return candidateList
+                annotated_word = self.words[j]
+                next_annotated_word = self.words[j + 1]
+                if isinstance(annotated_word, AnnotatedWord) and isinstance(next_annotated_word, AnnotatedWord):
+                    if annotated_word not in candidate_list and next_annotated_word in candidate_list \
+                            and annotated_word.getSemantic() is not None \
+                            and annotated_word.getSemantic() == next_annotated_word.getSemantic():
+                        candidate_list.append(annotated_word)
+        return candidate_list
 
     cpdef str getPredicate(self, int index):
         """
@@ -224,7 +228,7 @@ cdef class AnnotatedSentence(Sentence):
         str
             File name of the sentence
         """
-        return self.__fileName
+        return self.__file_name
 
     cpdef removeWord(self, int index):
         """
@@ -247,21 +251,21 @@ cdef class AnnotatedSentence(Sentence):
         str
              String result which has all the stems of each item in words {@link ArrayList}.
         """
-        cdef AnnotatedWord annotatedWord
+        cdef AnnotatedWord annotated_word
         cdef str result
         cdef int i
         if len(self.words) > 0:
-            annotatedWord = self.words[0]
-            if annotatedWord.getParse() is not None:
-                result = annotatedWord.getParse().getWord().getName()
+            annotated_word = self.words[0]
+            if annotated_word.getParse() is not None:
+                result = annotated_word.getParse().getWord().getName()
             else:
-                result = annotatedWord.getName()
+                result = annotated_word.getName()
             for i in range(1, len(self.words)):
-                annotatedWord = self.words[i]
-                if annotatedWord.getParse() is not None:
-                    result = result + " " + annotatedWord.getParse().getWord().getName()
+                annotated_word = self.words[i]
+                if annotated_word.getParse() is not None:
+                    result = result + " " + annotated_word.getParse().getWord().getName()
                 else:
-                    result = result + " " + annotatedWord.getName()
+                    result = result + " " + annotated_word.getName()
             return result
         else:
             return ""
@@ -281,7 +285,7 @@ cdef class AnnotatedSentence(Sentence):
         """
         Saves the current sentence.
         """
-        self.writeToFile(self.__fileName)
+        self.writeToFile(self.__file_name)
 
     cpdef str getUniversalDependencyFormat(self, str path=None):
         cdef str result
@@ -318,37 +322,45 @@ cdef class AnnotatedSentence(Sentence):
         list
             List of literal candidates containing all possible root forms and multiword expressions.
         """
-        cdef AnnotatedWord word, firstSucceedingWord, secondSucceedingWord
-        cdef list possibleLiterals
-        cdef MorphologicalParse morphologicalParse
-        cdef MetamorphicParse metamorphicParse
+        cdef AnnotatedWord word, first_succeeding_word, second_succeeding_word
+        cdef list possible_literals
+        cdef MorphologicalParse morphologicalpParse
+        cdef MetamorphicParse metamorphic_parse
         word = self.getWord(wordIndex)
-        possibleLiterals = []
+        possible_literals = []
         if isinstance(word, AnnotatedWord):
-            morphologicalParse = word.getParse()
-            metamorphicParse = word.getMetamorphicParse()
-            possibleLiterals.extend(wordNet.constructLiterals(morphologicalParse.getWord().getName(),
-                                                              morphologicalParse, metamorphicParse, fsm))
-            firstSucceedingWord = None
-            secondSucceedingWord = None
+            morphological_parse = word.getParse()
+            metamorphic_parse = word.getMetamorphicParse()
+            possible_literals.extend(wordNet.constructLiterals(morphological_parse.getWord().getName(),
+                                                               morphological_parse,
+                                                               metamorphic_parse,
+                                                               fsm))
+            first_succeeding_word = None
+            second_succeeding_word = None
             if self.wordCount() > wordIndex + 1:
-                firstSucceedingWord = self.getWord(wordIndex + 1)
+                first_succeeding_word = self.getWord(wordIndex + 1)
                 if self.wordCount() > wordIndex + 2:
-                    secondSucceedingWord = self.getWord(wordIndex + 2)
-            if firstSucceedingWord is not None and isinstance(firstSucceedingWord, AnnotatedWord):
-                if secondSucceedingWord is not None and isinstance(secondSucceedingWord, AnnotatedWord):
-                    possibleLiterals.extend(wordNet.constructIdiomLiterals(fsm, word.getParse(),
-                                                                           word.getMetamorphicParse(),
-                                                                           firstSucceedingWord.getParse(),
-                                                                           firstSucceedingWord.getMetamorphicParse(),
-                                                                           secondSucceedingWord.getParse(),
-                                                                           secondSucceedingWord.getMetamorphicParse()))
-                possibleLiterals.extend(wordNet.constructIdiomLiterals(fsm, word.getParse(), word.getMetamorphicParse(),
-                                                                       firstSucceedingWord.getParse(),
-                                                                       firstSucceedingWord.getMetamorphicParse()))
-        return possibleLiterals
+                    second_succeeding_word = self.getWord(wordIndex + 2)
+            if first_succeeding_word is not None and isinstance(first_succeeding_word, AnnotatedWord):
+                if second_succeeding_word is not None and isinstance(second_succeeding_word, AnnotatedWord):
+                    possible_literals.extend(wordNet.constructIdiomLiterals(fsm,
+                                                                            word.getParse(),
+                                                                            word.getMetamorphicParse(),
+                                                                            first_succeeding_word.getParse(),
+                                                                            first_succeeding_word.getMetamorphicParse(),
+                                                                            second_succeeding_word.getParse(),
+                                                                            second_succeeding_word.getMetamorphicParse()))
+                possible_literals.extend(wordNet.constructIdiomLiterals(fsm,
+                                                                        word.getParse(),
+                                                                        word.getMetamorphicParse(),
+                                                                        first_succeeding_word.getParse(),
+                                                                        first_succeeding_word.getMetamorphicParse()))
+        return possible_literals
 
-    cpdef list constructSynSets(self, WordNet wordNet, FsmMorphologicalAnalyzer fsm, int wordIndex):
+    cpdef list constructSynSets(self,
+                                WordNet wordNet,
+                                FsmMorphologicalAnalyzer fsm,
+                                int wordIndex):
         """
         Creates a list of synset candidates for the i'th word in the sentence. It combines the results of
         1. All possible synsets containing the i'th word in the sentence
@@ -369,48 +381,51 @@ cdef class AnnotatedSentence(Sentence):
         list
             List of synset candidates containing all possible root forms and multiword expressions.
         """
-        cdef AnnotatedWord word, firstPrecedingWord, secondPrecedingWord, firstSucceedingWord, secondSucceedingWord
-        cdef list possibleSynSets
-        cdef MorphologicalParse morphologicalParse
-        cdef MetamorphicParse metamorphicParse
+        cdef AnnotatedWord word, first_preceding_word, second_preceding_word
+        cdef AnnotatedWord first_succeeding_word, second_succeeding_word
+        cdef list possible_syn_sets
+        cdef MorphologicalParse morphological_parse
+        cdef MetamorphicParse metamorphic_parse
         word = self.getWord(wordIndex)
-        possibleSynSets = []
+        possible_syn_sets = []
         if isinstance(word, AnnotatedWord):
-            morphologicalParse = word.getParse()
-            metamorphicParse = word.getMetamorphicParse()
-            possibleSynSets.extend(wordNet.constructSynSets(morphologicalParse.getWord().getName(),
-                                                            morphologicalParse, metamorphicParse, fsm))
-            firstPrecedingWord = None
-            secondPrecedingWord = None
-            firstSucceedingWord = None
-            secondSucceedingWord = None
+            morphological_parse = word.getParse()
+            metamorphic_parse = word.getMetamorphicParse()
+            possible_syn_sets.extend(wordNet.constructSynSets(morphological_parse.getWord().getName(),
+                                                              morphological_parse,
+                                                              metamorphic_parse,
+                                                              fsm))
+            first_preceding_word = None
+            second_preceding_word = None
+            first_succeeding_word = None
+            second_succeeding_word = None
             if wordIndex > 0:
-                firstPrecedingWord = self.getWord(wordIndex - 1)
+                first_preceding_word = self.getWord(wordIndex - 1)
                 if wordIndex > 1:
-                    secondPrecedingWord = self.getWord(wordIndex - 2)
+                    second_preceding_word = self.getWord(wordIndex - 2)
             if self.wordCount() > wordIndex + 1:
-                firstSucceedingWord = self.getWord(wordIndex + 1)
+                first_succeeding_word = self.getWord(wordIndex + 1)
                 if self.wordCount() > wordIndex + 2:
-                    secondSucceedingWord = self.getWord(wordIndex + 2)
-            if firstPrecedingWord is not None and isinstance(firstPrecedingWord, AnnotatedWord):
-                if secondPrecedingWord is not None and isinstance(secondPrecedingWord, AnnotatedWord):
-                    possibleSynSets.extend(wordNet.constructIdiomSynSets(fsm, secondPrecedingWord.getParse(),
-                                                                         secondPrecedingWord.getMetamorphicParse(),
-                                                                         firstPrecedingWord.getParse(),
-                                                                         firstPrecedingWord.getMetamorphicParse(),
+                    second_succeeding_word = self.getWord(wordIndex + 2)
+            if first_preceding_word is not None and isinstance(first_preceding_word, AnnotatedWord):
+                if second_preceding_word is not None and isinstance(second_preceding_word, AnnotatedWord):
+                    possible_syn_sets.extend(wordNet.constructIdiomSynSets(fsm, second_preceding_word.getParse(),
+                                                                         second_preceding_word.getMetamorphicParse(),
+                                                                         first_preceding_word.getParse(),
+                                                                         first_preceding_word.getMetamorphicParse(),
                                                                          word.getParse(), word.getMetamorphicParse()))
-                possibleSynSets.extend(wordNet.constructIdiomSynSets(fsm, firstPrecedingWord.getParse(),
-                                                                     firstPrecedingWord.getMetamorphicParse(),
+                possible_syn_sets.extend(wordNet.constructIdiomSynSets(fsm, first_preceding_word.getParse(),
+                                                                     first_preceding_word.getMetamorphicParse(),
                                                                      word.getParse(), word.getMetamorphicParse()))
-            if firstSucceedingWord is not None and isinstance(firstSucceedingWord, AnnotatedWord):
-                if secondSucceedingWord is not None and isinstance(secondSucceedingWord, AnnotatedWord):
-                    possibleSynSets.extend(wordNet.constructIdiomSynSets(fsm, word.getParse(),
+            if first_succeeding_word is not None and isinstance(first_succeeding_word, AnnotatedWord):
+                if second_succeeding_word is not None and isinstance(second_succeeding_word, AnnotatedWord):
+                    possible_syn_sets.extend(wordNet.constructIdiomSynSets(fsm, word.getParse(),
                                                                          word.getMetamorphicParse(),
-                                                                         firstSucceedingWord.getParse(),
-                                                                         firstSucceedingWord.getMetamorphicParse(),
-                                                                         secondSucceedingWord.getParse(),
-                                                                         secondSucceedingWord.getMetamorphicParse()))
-                possibleSynSets.extend(wordNet.constructIdiomSynSets(fsm, word.getParse(), word.getMetamorphicParse(),
-                                                                     firstSucceedingWord.getParse(),
-                                                                     firstSucceedingWord.getMetamorphicParse()))
-        return possibleSynSets
+                                                                         first_succeeding_word.getParse(),
+                                                                         first_succeeding_word.getMetamorphicParse(),
+                                                                         second_succeeding_word.getParse(),
+                                                                         second_succeeding_word.getMetamorphicParse()))
+                possible_syn_sets.extend(wordNet.constructIdiomSynSets(fsm, word.getParse(), word.getMetamorphicParse(),
+                                                                     first_succeeding_word.getParse(),
+                                                                     first_succeeding_word.getMetamorphicParse()))
+        return possible_syn_sets

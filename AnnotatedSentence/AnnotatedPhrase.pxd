@@ -3,7 +3,7 @@ from Corpus.Sentence cimport Sentence
 
 cdef class AnnotatedPhrase(Sentence):
 
-    cdef int __wordIndex
+    cdef int __word_index
     cdef str __tag
 
     cpdef int getWordIndex(self)

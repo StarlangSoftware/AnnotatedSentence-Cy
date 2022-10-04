@@ -6,7 +6,9 @@ from DependencyParser.ParserEvaluationScore cimport ParserEvaluationScore
 
 cdef class AnnotatedCorpus(Corpus):
 
-    def __init__(self, folder: str, pattern: str = None):
+    def __init__(self,
+                 folder: str,
+                 pattern: str = None):
         """
         A constructor of AnnotatedCorpus class which reads all AnnotatedSentence files with the file
         name satisfying the given pattern inside the given folder. For each file inside that folder, the constructor
@@ -19,15 +21,15 @@ cdef class AnnotatedCorpus(Corpus):
         pattern : str
             File pattern such as "." ".train" ".test".
         """
-        cdef str fileName
+        cdef str file_name
         cdef AnnotatedSentence sentence
         self.sentences = []
         for root, dirs, files in os.walk(folder):
             for file in files:
-                fileName = os.path.join(root, file)
-                if (pattern is None or pattern in fileName) and re.match("\\d+\\.", file):
-                    f = open(fileName, "r", encoding='utf8')
-                    sentence = AnnotatedSentence(f, fileName)
+                file_name = os.path.join(root, file)
+                if (pattern is None or pattern in file_name) and re.match("\\d+\\.", file):
+                    f = open(file_name, "r", encoding='utf8')
+                    sentence = AnnotatedSentence(f, file_name)
                     self.sentences.append(sentence)
 
     cpdef ParserEvaluationScore compareParses(self, AnnotatedCorpus corpus):
@@ -41,7 +43,9 @@ cdef class AnnotatedCorpus(Corpus):
             result.add(sentence1.compareParses(sentence2))
         return result
 
-    cpdef exportUniversalDependencyFormat(self, str outputFileName, str path=None):
+    cpdef exportUniversalDependencyFormat(self,
+                                          str outputFileName,
+                                          str path=None):
         cdef int i
         cdef AnnotatedSentence sentence
         file = open(outputFileName, "w")

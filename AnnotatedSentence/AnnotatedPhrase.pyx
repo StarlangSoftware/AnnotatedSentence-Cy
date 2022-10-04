@@ -1,6 +1,8 @@
 cdef class AnnotatedPhrase(Sentence):
 
-    def __init__(self, wordIndex: int, tag: str):
+    def __init__(self,
+                 wordIndex: int,
+                 tag: str):
         """
         Constructor for AnnotatedPhrase. AnnotatedPhrase stores information about phrases such as
         Shallow Parse phrases or named entity phrases.
@@ -13,7 +15,7 @@ cdef class AnnotatedPhrase(Sentence):
             Tag of the phrase. Corresponds to the shallow parse or named entity tag.
         """
         super().__init__()
-        self.__wordIndex = wordIndex
+        self.__word_index = wordIndex
         self.__tag = tag
 
     cpdef int getWordIndex(self):
@@ -25,7 +27,7 @@ cdef class AnnotatedPhrase(Sentence):
         int
             Starting index of the first word in the phrase w.r.t. original sentence the phrase occurs.
         """
-        return self.__wordIndex
+        return self.__word_index
 
     cpdef str getTag(self):
         """
