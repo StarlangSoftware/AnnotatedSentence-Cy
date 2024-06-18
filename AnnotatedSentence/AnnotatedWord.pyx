@@ -498,6 +498,12 @@ cdef class AnnotatedWord(Word):
             self.__universal_dependency = UniversalDependencyRelation(to, dependencyType)
 
     cpdef str getUniversalDependencyFormat(self, int sentenceLength):
+        """
+        Returns the connlu format string for this word. Adds surface form, root, universal pos tag, features, and
+        universal dependency information.
+        :param sentenceLength: Number of words in the sentence.
+        :return: The connlu format string for this word.
+        """
         cdef str result
         cdef list features
         cdef bint first
@@ -534,6 +540,10 @@ cdef class AnnotatedWord(Word):
         return self.name
 
     cpdef checkGazetteer(self, Gazetteer gazetteer):
+        """
+        Checks the gazetteer and sets the named entity tag accordingly.
+        :param gazetteer: Gazetteer used to set named entity tag.
+        """
         cdef str word_lower_case
         word_lower_case = self.name.lower()
         if gazetteer.contains(word_lower_case) and self.__parse.containsTag(MorphologicalTag.PROPERNOUN):

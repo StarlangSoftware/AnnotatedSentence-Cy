@@ -33,6 +33,12 @@ cdef class AnnotatedCorpus(Corpus):
                     self.sentences.append(sentence)
 
     cpdef ParserEvaluationScore compareParses(self, AnnotatedCorpus corpus):
+        """
+        Compares the corpus with the given corpus and returns a parser evaluation score for this comparison. The result
+        is calculated by summing up the parser evaluation scores of sentence by sentence dependency relation comparisons.
+        :param corpus: Corpus to be compared.
+        :return: A parser evaluation score object.
+        """
         cdef ParserEvaluationScore result
         cdef int i
         cdef AnnotatedSentence sentence1, sentence2
@@ -46,6 +52,13 @@ cdef class AnnotatedCorpus(Corpus):
     cpdef exportUniversalDependencyFormat(self,
                                           str outputFileName,
                                           str path=None):
+        """
+        Exports the annotated corpus as a UD file in connlu format. Every sentence is converted into connlu format and
+        appended to the output file. Multiple paths are possible in the annotated corpus. This method outputs the
+        sentences in the given path.
+        :param outputFileName: Output file name in connlu format.
+        :param path: Current path for the part of the annotated corpus.
+        """
         cdef int i
         cdef AnnotatedSentence sentence
         file = open(outputFileName, "w")

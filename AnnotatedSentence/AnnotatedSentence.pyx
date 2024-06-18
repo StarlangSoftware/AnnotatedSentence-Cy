@@ -89,6 +89,13 @@ cdef class AnnotatedSentence(Sentence):
     cpdef bint updateConnectedPredicate(self,
                                         str previousId,
                                         str currentId):
+        """
+        Replaces id's of predicates, which have previousId as synset id, with currentId. Replaces also predicate id's of
+        frame elements, which have predicate id's previousId, with currentId.
+        :param previousId: Previous id of the synset.
+        :param currentId: Replacement id.
+        :return: Returns true, if any replacement has been done; false otherwise.
+        """
         cdef bint modified
         cdef AnnotatedWord word
         modified = False
@@ -271,6 +278,12 @@ cdef class AnnotatedSentence(Sentence):
             return ""
 
     cpdef ParserEvaluationScore compareParses(self, AnnotatedSentence sentence):
+        """
+        Compares the sentence with the given sentence and returns a parser evaluation score for this comparison. The result
+        is calculated by summing up the parser evaluation scores of word by word dpendency relation comparisons.
+        :param sentence: Sentence to be compared.
+        :return: A parser evaluation score object.
+        """
         cdef ParserEvaluationScore score
         cdef UniversalDependencyRelation relation1, relation2
         score = ParserEvaluationScore()
@@ -288,6 +301,11 @@ cdef class AnnotatedSentence(Sentence):
         self.writeToFile(self.__file_name)
 
     cpdef str getUniversalDependencyFormat(self, str path=None):
+        """
+        Returns the connlu format of the sentence with appended prefix string based on the path.
+        :param path: Path of the sentence.
+        :return: The connlu format of the sentence with appended prefix string based on the path.
+        """
         cdef str result
         cdef int i
         cdef AnnotatedWord word
