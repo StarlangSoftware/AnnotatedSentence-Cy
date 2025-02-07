@@ -1,6 +1,9 @@
 import re
+
+from FrameNet.FrameElementList cimport FrameElementList
 from MorphologicalAnalysis.MorphologicalTag import MorphologicalTag
 from MorphologicalAnalysis.FsmParse cimport FsmParse
+from PropBank.ArgumentList cimport ArgumentList
 from SentiNet.PolarityType import PolarityType
 from AnnotatedSentence.ViewLayerType import ViewLayerType
 from Corpus.WordFormat import WordFormat
@@ -28,8 +31,8 @@ cdef class AnnotatedWord(Word):
         self.__metamorphic_parse = None
         self.__semantic = None
         self.__named_entity_type = None
-        self.__argument = None
-        self.__frame_element = None
+        self.__argument_list = None
+        self.__frame_element_list = None
         self.__shallow_parse = None
         self.__universal_dependency = None
         self.__slot = None
@@ -57,9 +60,9 @@ cdef class AnnotatedWord(Word):
                 elif layerType == "namedEntity":
                     self.__named_entity_type = NamedEntityType.getNamedEntityType(layer_value)
                 elif layerType == "propbank" or layerType == "propBank":
-                    self.__argument = Argument(layer_value)
+                    self.__argument_list = ArgumentList(layer_value)
                 elif layerType == "framenet" or layerType == "frameNet":
-                    self.__frame_element = FrameElement(layer_value)
+                    self.__frame_element_list = FrameElementList(layer_value)
                 elif layerType == "shallowParse":
                     self.__shallow_parse = layer_value
                 elif layerType == "semantics":
@@ -78,18 +81,15 @@ cdef class AnnotatedWord(Word):
         elif isinstance(layerType, NamedEntityType):
             super().__init__(word)
             self.__named_entity_type = layerType
-            self.__argument = Argument("NONE")
         elif isinstance(layerType, MorphologicalParse):
             super().__init__(word)
             self.__parse = layerType
             self.__named_entity_type = NamedEntityType.NONE
-            self.__argument = Argument("NONE")
         elif isinstance(layerType, FsmParse):
             super().__init__(word)
             self.__parse = layerType
             self.__named_entity_type = NamedEntityType.NONE
             self.setMetamorphicParse(layerType.withList())
-            self.__argument = Argument("NONE")
 
     def __str__(self) -> str:
         """
@@ -117,10 +117,10 @@ cdef class AnnotatedWord(Word):
             result = result + "{semantics=" + self.__semantic + "}"
         if self.__named_entity_type is not None:
             result = result + "{namedEntity=" + NamedEntityType.getNamedEntityString(self.__named_entity_type) + "}"
-        if self.__argument is not None:
-            result = result + "{propbank=" + self.__argument.__str__() + "}"
-        if self.__frame_element is not None:
-            result = result + "{framenet=" + self.__frame_element.__str__() + "}"
+        if self.__argument_list is not None:
+            result = result + "{propbank=" + self.__argument_list.__str__() + "}"
+        if self.__frame_element_list is not None:
+            result = result + "{framenet=" + self.__frame_element_list.__str__() + "}"
         if self.__slot is not None:
             result = result + "{slot=" + self.__slot.__str__() + "}"
         if self.__shallow_parse is not None:
@@ -166,11 +166,11 @@ cdef class AnnotatedWord(Word):
         elif viewLayerType == ViewLayerType.TURKISH_WORD:
             return self.name
         elif viewLayerType == ViewLayerType.PROPBANK:
-            if self.__argument is not None:
-                return self.__argument.__str__()
+            if self.__argument_list is not None:
+                return self.__argument_list.__str__()
         elif viewLayerType == ViewLayerType.FRAMENET:
-            if self.__frame_element is not None:
-                return self.__frame_element.__str__()
+            if self.__frame_element_list is not None:
+                return self.__frame_element_list.__str__()
         elif viewLayerType == ViewLayerType.SLOT:
             if self.__slot is not None:
                 return self.__slot.__str__()
@@ -281,7 +281,7 @@ cdef class AnnotatedWord(Word):
         else:
             self.__named_entity_type = None
 
-    cpdef Argument getArgument(self):
+    cpdef ArgumentList getArgumentList(self):
         """
         Returns the semantic role layer of the word.
 
@@ -290,23 +290,23 @@ cdef class AnnotatedWord(Word):
         Argument
             Semantic role tag of the word.
         """
-        return self.__argument
+        return self.__argument_list
 
-    cpdef setArgument(self, str argument):
+    cpdef setArgumentList(self, str argumentList):
         """
         Sets the semantic role layer of the word.
 
         PARAMETERS
         ----------
-        argument : Argument
+        argumentList : ArgumentList
             New semantic role tag of the word.
         """
-        if argument is not None:
-            self.__argument = Argument(argument)
+        if argumentList is not None:
+            self.__argument_list = ArgumentList(argumentList)
         else:
-            self.__argument = None
+            self.__argument_list = None
 
-    cpdef FrameElement getFrameElement(self):
+    cpdef FrameElementList getFrameElementList(self):
         """
         Returns the framenet layer of the word.
 
@@ -315,21 +315,21 @@ cdef class AnnotatedWord(Word):
         FrameElement
             Framenet tag of the word.
         """
-        return self.__frame_element
+        return self.__frame_element_list
 
-    cpdef setFrameElement(self, str frameElement):
+    cpdef setFrameElementList(self, str frameElementList):
         """
         Sets the framenet layer of the word.
 
         PARAMETERS
         ----------
-        frameElement : str
+        frameElementList : str
             New framenet tag of the word.
         """
-        if frameElement is not None:
-            self.__frame_element = Argument(frameElement)
+        if frameElementList is not None:
+            self.__frame_element_list = FrameElementList(frameElementList)
         else:
-            self.__frame_element = None
+            self.__frame_element_list = None
 
     cpdef Slot getSlot(self):
         """
@@ -443,7 +443,7 @@ cdef class AnnotatedWord(Word):
 
         PARAMETERS
         ----------
-        parse : str
+        ccg : str
             New ccg tag of the word.
         """
         self.__ccg = ccg

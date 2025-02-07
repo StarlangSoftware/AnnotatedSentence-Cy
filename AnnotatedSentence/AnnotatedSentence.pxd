@@ -11,6 +11,7 @@ cdef class AnnotatedSentence(Sentence):
     cdef str __file_name
 
     cpdef list getShallowParseGroups(self)
+    cpdef bint containsFramePredicate(self)
     cpdef bint containsPredicate(self)
     cpdef bint updateConnectedPredicate(self, str previousId, str currentId)
     cpdef list predicateCandidates(self, FramesetList framesetList)

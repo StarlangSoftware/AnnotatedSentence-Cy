@@ -1,11 +1,11 @@
 from DependencyParser.Universal.UniversalDependencyRelation cimport UniversalDependencyRelation
 from Dictionary.Word cimport Word
-from FrameNet.FrameElement cimport FrameElement
+from FrameNet.FrameElementList cimport FrameElementList
 from MorphologicalAnalysis.MetamorphicParse cimport MetamorphicParse
 from MorphologicalAnalysis.MorphologicalParse cimport MorphologicalParse
 from NamedEntityRecognition.Gazetteer cimport Gazetteer
 from NamedEntityRecognition.Slot cimport Slot
-from PropBank.Argument cimport Argument
+from PropBank.ArgumentList cimport ArgumentList
 
 
 cdef class AnnotatedWord(Word):
@@ -24,8 +24,8 @@ cdef class AnnotatedWord(Word):
     cdef MetamorphicParse __metamorphic_parse
     cdef str __semantic
     cdef object __named_entity_type
-    cdef Argument __argument
-    cdef FrameElement __frame_element
+    cdef ArgumentList __argument_list
+    cdef FrameElementList __frame_element_list
     cdef str __shallow_parse
     cdef UniversalDependencyRelation __universal_dependency
     cdef Slot __slot
@@ -43,10 +43,10 @@ cdef class AnnotatedWord(Word):
     cpdef setSemantic(self, str semantic)
     cpdef object getNamedEntityType(self)
     cpdef setNamedEntityType(self, str namedEntity)
-    cpdef Argument getArgument(self)
-    cpdef setArgument(self, str argument)
-    cpdef FrameElement getFrameElement(self)
-    cpdef setFrameElement(self, str frameElement)
+    cpdef ArgumentList getArgumentList(self)
+    cpdef setArgumentList(self, str argumentList)
+    cpdef FrameElementList getFrameElementList(self)
+    cpdef setFrameElementList(self, str frameElementList)
     cpdef Slot getSlot(self)
     cpdef setSlot(self, str slot)
     cpdef object getPolarity(self)
