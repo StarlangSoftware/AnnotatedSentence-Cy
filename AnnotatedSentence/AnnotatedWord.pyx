@@ -8,7 +8,7 @@ from SentiNet.PolarityType import PolarityType
 from AnnotatedSentence.ViewLayerType import ViewLayerType
 from Corpus.WordFormat import WordFormat
 from NamedEntityRecognition.NamedEntityType import NamedEntityType
-from AnnotatedSentence.Language import Language
+from AnnotatedSentence.LanguageType import LanguageType
 
 
 cdef class AnnotatedWord(Word):
@@ -39,7 +39,7 @@ cdef class AnnotatedWord(Word):
         self.__polarity = None
         self.__ccg = None
         self.__pos_tag = None
-        self.__language = Language.TURKISH
+        self.__language = LanguageType.TURKISH
         if layerType is None:
             split_layers = re.compile("[{}]").split(word)
             for layer in split_layers:
@@ -103,11 +103,11 @@ cdef class AnnotatedWord(Word):
         """
         cdef str result
         result = ""
-        if self.__language == Language.TURKISH:
+        if self.__language == LanguageType.TURKISH:
             result = "{turkish=" + self.name + "}"
-        elif self.__language == Language.ENGLISH:
+        elif self.__language == LanguageType.ENGLISH:
             result = "{english=" + self.name + "}"
-        elif self.__language == Language.PERSIAN:
+        elif self.__language == LanguageType.PERSIAN:
             result = "{persian=" + self.name + "}"
         if self.__parse is not None:
             result = result + "{morphologicalAnalysis=" + self.__parse.__str__() + "}"
@@ -563,7 +563,7 @@ cdef class AnnotatedWord(Word):
         return self.__language
 
     @staticmethod
-    def getLanguageFromString(languageString: str) -> Language:
+    def getLanguageFromString(languageString: str) -> LanguageType:
         """
         Converts a language string to language.
 
@@ -577,10 +577,10 @@ cdef class AnnotatedWord(Word):
         Language corresponding to the languageString.
         """
         if languageString == "turkish" or languageString == "Turkish":
-            return Language.TURKISH
+            return LanguageType.TURKISH
         elif languageString == "english" or languageString == "English":
-            return Language.ENGLISH
+            return LanguageType.ENGLISH
         elif languageString == "persian" or languageString == "Persian":
-            return Language.PERSIAN
+            return LanguageType.PERSIAN
         else:
-            return Language.TURKISH
+            return LanguageType.TURKISH

@@ -2,7 +2,7 @@ cdef class AnnotatedPhrase(Sentence):
 
     def __init__(self,
                  wordIndex: int,
-                 tag: str):
+                 tag: Optional[str]):
         """
         Constructor for AnnotatedPhrase. AnnotatedPhrase stores information about phrases such as
         Shallow Parse phrases or named entity phrases.
