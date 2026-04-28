@@ -8,8 +8,8 @@ from Cython.Build import cythonize
 setup(
     ext_modules=cythonize(["AnnotatedSentence/*.pyx"],
                           compiler_directives={'language_level': "3"}),
-    name='nlptoolkit-annotatedsentence-cy',
-    version='1.0.24',
+    name='nlptoolkit_annotatedsentence_cy',
+    version='1.0.25',
     packages=['AnnotatedSentence'],
     package_data={'AnnotatedSentence': ['*.pxd', '*.pyx', '*.c', '*.py']},
     url='https://github.com/StarlangSoftware/AnnotatedSentence-Cy',
